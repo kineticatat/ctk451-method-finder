@@ -1,177 +1,32 @@
 <!DOCTYPE html>
-
 <html lang="en">
-
 <head>
-
     <meta charset="UTF-8">
-
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <title>CTK 451: Research Method Finder</title>
-
     <style>
-
-        body { font-family: 'Helvetica Neue', sans-serif; background: #f4f4f9; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
-
-        #app-container { background: white; padding: 2rem; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); max-width: 500px; width: 90%; text-align: center; }
-
-        h2 { color: #333; margin-bottom: 1.5rem; }
-
-        .btn { display: block; width: 100%; padding: 12px; margin: 10px 0; border: none; border-radius: 6px; background: #6200ee; color: white; font-size: 1rem; cursor: pointer; transition: background 0.2s; }
-
-        .btn:hover { background: #3700b3; }
-
-        .result { background: #e8f5e9; padding: 1rem; border-radius: 8px; border-left: 5px solid #4caf50; text-align: left; }
-
-        .reset-btn { background: #555; margin-top: 1.5rem; }
-
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f0f2f5; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
+        #app-container { background: white; padding: 2.5rem; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); max-width: 600px; width: 90%; text-align: center; }
+        h2 { color: #2c3e50; margin-bottom: 1rem; line-height: 1.2; }
+        p { color: #7f8c8d; margin-bottom: 2rem; }
+        .btn { display: block; width: 100%; padding: 15px; margin: 12px 0; border: 2px solid #6200ee; border-radius: 8px; background: white; color: #6200ee; font-weight: bold; font-size: 1rem; cursor: pointer; transition: all 0.2s; }
+        .btn:hover { background: #6200ee; color: white; transform: translateY(-2px); }
+        .result { background: #fafffa; padding: 2rem; border-radius: 12px; border: 2px solid #4caf50; text-align: left; animation: fadeIn 0.5s; }
+        .result h3 { color: #2e7d32; margin-top: 0; }
+        .tag { display: inline-block; background: #e8f0fe; color: #1967d2; padding: 4px 12px; border-radius: 20px; font-size: 0.8rem; margin-bottom: 10px; }
+        .reset-btn { background: #edeff2; border: none; color: #555; margin-top: 2rem; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
     </style>
-
 </head>
-
 <body>
 
-
-
 <div id="app-container">
-
-    <div id="content">
-
-        </div>
-
+    <div id="content"></div>
 </div>
 
-
-
 <script>
-
     const data = {
-
         start: {
-
-            text: "What is your primary goal right now?",
-
-            options: [
-
-                { text: "I want to see what people DO (Behavioral)", next: "behavioral" },
-
-                { text: "I want to know what people THINK (Attitudinal)", next: "attitudinal" },
-
-                { text: "I want to LEARN BY MAKING (Practice-Based)", next: "practice" }
-
-            ]
-
-        },
-
-        behavioral: {
-
-            text: "Do you need numbers or a deep look at the context?",
-
-            options: [
-
-                { text: "I need numbers and metrics.", next: "ab_test" },
-
-                { text: "I need to see them use it in real life.", next: "ethnography" },
-
-                { text: "I need to see where they get stuck.", next: "usability" }
-
-            ]
-
-        },
-
-        attitudinal: {
-
-            text: "How deep do you want to go into their thoughts?",
-
-            options: [
-
-                { text: "Detailed, one-on-one stories.", next: "interview" },
-
-                { text: "Group debate and brainstorming.", next: "focus_group" },
-
-                { text: "Patterns of thought over time.", next: "diary" }
-
-            ]
-
-        },
-
-        // Results
-
-        ab_test: { isResult: true, title: "A/B Testing", desc: "Great for data-driven decisions and measurable outcomes. Good for optimizing interfaces." },
-
-        ethnography: { isResult: true, title: "Ethnographic Observation", desc: "Captures natural behaviors in context. Perfect for seeing how art or audio fits into a user's life." },
-
-        usability: { isResult: true, title: "Usability Study", desc: "Focuses on 'How to Fix.' Ideal for game design and app navigation." },
-
-        interview: { isResult: true, title: "Interviews", desc: "Detailed and flexible. Best for uncovering the 'Why' behind user experiences." },
-
-        focus_group: { isResult: true, title: "Focus Groups", desc: "Interactive and dynamic. Useful for early-stage brainstorming for illustration or radio plays." },
-
-        diary: { isResult: true, title: "Diary Study", desc: "Longitudinal insights. Tracks how user habits with your project evolve over time." },
-
-        practice: { isResult: true, title: "Practice-Based Research", desc: "Research conducted through your own creative practice. Focus on reflective insights." }
-
-    };
-
-
-
-    function render(step) {
-
-        const container = document.getElementById('content');
-
-        const current = data[step];
-
-        
-
-        if (current.isResult) {
-
-            container.innerHTML = `
-
-                <div class="result">
-
-                    <h3>Try: ${current.title}</h3>
-
-                    <p>${current.desc}</p>
-
-                </div>
-
-                <button class="btn reset-btn" onclick="render('start')">Start Over</button>
-
-            `;
-
-        } else {
-
-            let optionsHtml = current.options.map(opt => 
-
-                `<button class="btn" onclick="render('${opt.next}')">${opt.text}</button>`
-
-            ).join('');
-
-            
-
-            container.innerHTML = `
-
-                <h2>${current.text}</h2>
-
-                ${optionsHtml}
-
-            `;
-
-        }
-
-    }
-
-
-
-    // Initialize the app
-
-    render('start');
-
-</script>
-
-
-
-</body>
-
-</html>
+            text: "What is your primary research goal?",
+            desc: "Select the landscape that best fits your project needs.",
+            options:
